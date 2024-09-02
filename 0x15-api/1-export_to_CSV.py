@@ -1,30 +1,23 @@
 #!/usr/bin/python3
-"""
-a script that returns info about a customer's todo list
-"""
-import csv
-import requests
-from sys import argv
+"""Exports data in the CSV format"""
 
+if __name__ == "__main__":
 
-if __name__ == '__main__':
-    url = "https://jsonplaceholder.typicode.com"
-    employeeId = argv[1]
+    import csv
+    import requests
+    import sys
 
-    employee = requests.get("{}/users/{}".format(url, employeeId)).json()
-    todos = requests.get(url + "/todos", params={"userId": employeeId}).json()
+    userId = sys.argv[1]
+    user = requests.get("https://jsonplaceholder.typicode.com/users/{}"
+                        .format(userId))
+    name = user.json().get('username')
+    todos = requests.get('https://jsonplaceholder.typicode.com/todos')
 
-    userName = employee.get('username')
-    fileName = employeeId + ".csv"
-
-    line = []
-    for info in todos:
-        line.append([employeeId, userName, 
-                     info.get('completed'), info.get('title')])
-
-    with open(fileName, "w", newline="") as csvfile:
-        writer = csv.writer(csvfile, delimiter=',', quotechar='"',
-                             quoting=csv.QUOTE_ALL)
-
-        for r in line:
-            writer.writerow(r)
+    filename = userId + '.csv'
+    with open(filename, mode='w') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"',
+                            quoting=csv.QUOTE_ALL, lineterminator='\n')
+        for task in todos.json():
+            if task.get('userId') == int(userId):
+                writer.writerow([userId, name, str(task.get('completed')),
+                                 task.get('title')])
