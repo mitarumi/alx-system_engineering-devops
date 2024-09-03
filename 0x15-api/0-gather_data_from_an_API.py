@@ -27,3 +27,4 @@ if __name__ == '__main__':
 
     for title in completed_tasks:
         print("\t {}".format(title))
+
