@@ -14,11 +14,12 @@ def number_of_subscribers(subreddit):
     - If not a valid subreddit, return 0.
     """
     req = requests.get(
-        "https://www.reddit.com/r/{}/about.json".format(subreddit),
-        headers={"User-Agent": "Custom"},
+        "https://www.reddit.com/r/{subreddit}/about.json",
+        headers={"User-Agent": "mita"},
     )
 
     if req.status_code == 200:
-        return req.json().get("data").get("subscribers")
+        data = req.json()
+        return data['data']['subscribers']
     else:
         return 0
