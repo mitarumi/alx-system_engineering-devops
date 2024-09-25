@@ -16,7 +16,7 @@ def number_of_subscribers(subreddit):
     try:
         req = requests.get(
             "https://www.reddit.com/r/{subreddit}/about.json",
-            headers={"User-Agent": "mita"},
+            headers={"User-Agent": "mita"},allow_redirects=False
         )
 
         if req.status_code == 200:
